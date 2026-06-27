@@ -1,0 +1,405 @@
+@import "tailwindcss";
+
+/* ============================================================
+   CATALYST STUDIO — DESIGN TOKEN SYSTEM
+   ============================================================
+   Organized in layers:
+   1. Primitive palette  — raw named color values
+   2. Semantic tokens    — role-named aliases used in components
+   3. Tailwind @theme    — registers tokens as Tailwind utilities
+   4. Base styles        — resets and document defaults
+   ============================================================ */
+
+/* ------------------------------------------------------------
+   1. PRIMITIVE PALETTE
+   Raw values only. Never use these directly in components.
+   Components must use semantic token names.
+   ------------------------------------------------------------ */
+:root {
+  /* Stone scale — warm neutrals, primary surface family */
+  --stone-25:  #FDFCFB;
+  --stone-50:  #FAFAF9;
+  --stone-100: #F5F5F4;
+  --stone-200: #E7E5E4;
+  --stone-300: #D6D3D1;
+  --stone-400: #A8A29E;
+  --stone-500: #78716C;
+  --stone-600: #57534E;
+  --stone-700: #44403C;
+  --stone-800: #292524;
+  --stone-900: #1C1917;
+  --stone-950: #0C0A09;
+
+  /* Amber scale — single accent color */
+  --amber-50:  #FFFBEB;
+  --amber-100: #FEF3C7;
+  --amber-200: #FDE68A;
+  --amber-300: #FCD34D;
+  --amber-400: #FBBF24;
+  --amber-500: #F59E0B;
+  --amber-600: #D97706;
+  --amber-700: #B45309;
+  --amber-800: #92400E;
+  --amber-900: #78350F;
+
+  /* Semantic status colors */
+  --green-50:  #F0FDF4;
+  --green-500: #22C55E;
+  --green-600: #16A34A;
+  --green-700: #15803D;
+
+  --red-50:    #FFF1F2;
+  --red-500:   #EF4444;
+  --red-600:   #DC2626;
+  --red-700:   #B91C1C;
+
+  --blue-50:   #EFF6FF;
+  --blue-500:  #3B82F6;
+  --blue-600:  #2563EB;
+  --blue-700:  #1D4ED8;
+
+  --violet-50:  #F5F3FF;
+  --violet-500: #8B5CF6;
+  --violet-600: #7C3AED;
+  --violet-700: #6D28D9;
+}
+
+/* ------------------------------------------------------------
+   2. SEMANTIC TOKENS — Light Mode (default)
+   Role-named variables used throughout all components.
+   ------------------------------------------------------------ */
+:root {
+  /* --- Surfaces --- */
+  --surface-base:    var(--stone-50);     /* Page background */
+  --surface-raised:  var(--stone-100);    /* Hovered rows, subtle cards */
+  --surface-overlay: #FFFFFF;             /* Modals, palettes, dropdowns */
+  --surface-inset:   var(--stone-200);    /* Input backgrounds, code blocks */
+
+  /* --- Borders --- */
+  --border-subtle:  var(--stone-100);     /* Lightest dividers */
+  --border-default: var(--stone-200);     /* Standard borders */
+  --border-strong:  var(--stone-300);     /* Emphasized borders */
+  --border-accent:  var(--amber-600);     /* Active/selected indicators */
+
+  /* --- Text --- */
+  --text-primary:   var(--stone-900);     /* Main content */
+  --text-secondary: var(--stone-600);     /* Supporting text */
+  --text-tertiary:  var(--stone-400);     /* Metadata, timestamps */
+  --text-disabled:  var(--stone-300);     /* Disabled state */
+  --text-inverse:   #FFFFFF;             /* On dark backgrounds */
+  --text-accent:    var(--amber-700);     /* Links, highlighted labels */
+
+  /* --- Accent (amber) --- */
+  --accent:         var(--amber-600);
+  --accent-hover:   var(--amber-700);
+  --accent-muted:   var(--amber-100);
+  --accent-text:    var(--amber-700);
+
+  /* --- Status dots and badges --- */
+  --status-active:  var(--green-600);
+  --status-blocked: var(--red-600);
+  --status-review:  var(--amber-600);
+  --status-done:    var(--stone-400);
+  --status-idle:    var(--stone-300);
+
+  /* --- Document type badge colors --- */
+  --doc-brief:   var(--blue-600);
+  --doc-spec:    var(--violet-600);
+  --doc-report:  var(--amber-600);
+  --doc-notes:   var(--stone-500);
+
+  /* --- Shadows --- */
+  --shadow-xs:  0 1px 2px 0 rgb(0 0 0 / 0.04);
+  --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.07), 0 1px 2px -1px rgb(0 0 0 / 0.06);
+  --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.07), 0 2px 4px -2px rgb(0 0 0 / 0.05);
+  --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.07), 0 4px 6px -4px rgb(0 0 0 / 0.05);
+  --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.08), 0 8px 10px -6px rgb(0 0 0 / 0.05);
+
+  /* --- Radius --- */
+  --radius-xs:  3px;
+  --radius-sm:  5px;
+  --radius-md:  8px;
+  --radius-lg:  12px;
+  --radius-xl:  16px;
+  --radius-full: 9999px;
+
+  /* --- Transitions --- */
+  --transition-fast:   100ms ease-out;
+  --transition-base:   150ms ease-out;
+  --transition-slow:   200ms ease-out;
+  --transition-enter:  200ms cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* --- Layout dimensions --- */
+  --rail-width:       220px;
+  --strip-height:     36px;
+  --canvas-max-width: 720px;
+  --canvas-padding-x: 40px;
+  --canvas-padding-y: 40px;
+
+  /* --- Fonts (set by Next.js font variables) --- */
+  --font-sans: var(--font-geist-sans), ui-sans-serif, system-ui, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, "Cascadia Code", monospace;
+}
+
+/* ------------------------------------------------------------
+   2a. SEMANTIC TOKENS — Dark Mode
+   ------------------------------------------------------------ */
+@media (prefers-color-scheme: dark) {
+  :root {
+    /* Surfaces */
+    --surface-base:    var(--stone-950);
+    --surface-raised:  var(--stone-900);
+    --surface-overlay: var(--stone-800);
+    --surface-inset:   var(--stone-800);
+
+    /* Borders */
+    --border-subtle:  #1a1715;
+    --border-default: var(--stone-800);
+    --border-strong:  var(--stone-700);
+    --border-accent:  var(--amber-500);
+
+    /* Text */
+    --text-primary:   var(--stone-50);
+    --text-secondary: var(--stone-400);
+    --text-tertiary:  var(--stone-500);
+    --text-disabled:  var(--stone-700);
+    --text-inverse:   var(--stone-900);
+    --text-accent:    var(--amber-400);
+
+    /* Accent */
+    --accent:         var(--amber-500);
+    --accent-hover:   var(--amber-400);
+    --accent-muted:   var(--amber-900);
+    --accent-text:    var(--amber-400);
+
+    /* Status */
+    --status-active:  var(--green-500);
+    --status-blocked: var(--red-500);
+    --status-review:  var(--amber-500);
+    --status-done:    var(--stone-600);
+    --status-idle:    var(--stone-700);
+
+    /* Doc types */
+    --doc-brief:   var(--blue-500);
+    --doc-spec:    var(--violet-500);
+    --doc-report:  var(--amber-500);
+    --doc-notes:   var(--stone-400);
+
+    /* Shadows (darker backgrounds need stronger shadows) */
+    --shadow-xs:  0 1px 2px 0 rgb(0 0 0 / 0.30);
+    --shadow-sm:  0 1px 3px 0 rgb(0 0 0 / 0.40), 0 1px 2px -1px rgb(0 0 0 / 0.30);
+    --shadow-md:  0 4px 6px -1px rgb(0 0 0 / 0.40), 0 2px 4px -2px rgb(0 0 0 / 0.30);
+    --shadow-lg:  0 10px 15px -3px rgb(0 0 0 / 0.40), 0 4px 6px -4px rgb(0 0 0 / 0.30);
+    --shadow-xl:  0 20px 25px -5px rgb(0 0 0 / 0.50), 0 8px 10px -6px rgb(0 0 0 / 0.40);
+  }
+}
+
+/* ------------------------------------------------------------
+   3. TAILWIND @THEME — Registers tokens as Tailwind utilities
+   Allows usage like: bg-surface-base, text-text-primary, etc.
+   ------------------------------------------------------------ */
+@theme inline {
+  /* Map font variables */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+
+  /* Surface colors → bg-surface-*, border-surface-* */
+  --color-surface-base:    var(--surface-base);
+  --color-surface-raised:  var(--surface-raised);
+  --color-surface-overlay: var(--surface-overlay);
+  --color-surface-inset:   var(--surface-inset);
+
+  /* Border colors → border-border-* */
+  --color-border-subtle:  var(--border-subtle);
+  --color-border-default: var(--border-default);
+  --color-border-strong:  var(--border-strong);
+  --color-border-accent:  var(--border-accent);
+
+  /* Text colors → text-text-* */
+  --color-text-primary:   var(--text-primary);
+  --color-text-secondary: var(--text-secondary);
+  --color-text-tertiary:  var(--text-tertiary);
+  --color-text-disabled:  var(--text-disabled);
+  --color-text-inverse:   var(--text-inverse);
+  --color-text-accent:    var(--text-accent);
+
+  /* Accent → bg-accent, text-accent, etc. */
+  --color-accent:        var(--accent);
+  --color-accent-hover:  var(--accent-hover);
+  --color-accent-muted:  var(--accent-muted);
+  --color-accent-text:   var(--accent-text);
+
+  /* Status colors */
+  --color-status-active:  var(--status-active);
+  --color-status-blocked: var(--status-blocked);
+  --color-status-review:  var(--status-review);
+  --color-status-done:    var(--status-done);
+  --color-status-idle:    var(--status-idle);
+
+  /* Doc type colors */
+  --color-doc-brief:  var(--doc-brief);
+  --color-doc-spec:   var(--doc-spec);
+  --color-doc-report: var(--doc-report);
+  --color-doc-notes:  var(--doc-notes);
+
+  /* Radius scale */
+  --radius-xs:   var(--radius-xs);
+  --radius-sm:   var(--radius-sm);
+  --radius-md:   var(--radius-md);
+  --radius-lg:   var(--radius-lg);
+  --radius-xl:   var(--radius-xl);
+  --radius-full: var(--radius-full);
+}
+
+/* ------------------------------------------------------------
+   4. BASE STYLES
+   ------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+html {
+  height: 100%;
+  /* Smooth scrolling within scroll containers */
+  scroll-behavior: smooth;
+  /* Prevent font size inflation on mobile */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
+}
+
+body {
+  height: 100%;
+  background-color: var(--surface-base);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  font-size: 14px;
+  line-height: 1.5;
+  /* Subpixel antialiasing for Geist */
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Remove default list styles when used semantically */
+ul[role="list"],
+ol[role="list"] {
+  list-style: none;
+}
+
+/* Better image defaults */
+img,
+picture,
+video,
+canvas,
+svg {
+  display: block;
+  max-width: 100%;
+}
+
+/* Inherit fonts for form elements */
+input,
+button,
+textarea,
+select {
+  font: inherit;
+}
+
+/* Prevent text overflow in headings */
+h1, h2, h3, h4, h5, h6 {
+  overflow-wrap: break-word;
+}
+
+/* Focus visible ring — keyboard-accessible */
+:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: var(--radius-xs);
+}
+
+/* Remove focus outline for mouse users */
+:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Text selection */
+::selection {
+  background-color: var(--accent-muted);
+  color: var(--text-primary);
+}
+
+/* Scrollbar — subtle and on-brand */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+::-webkit-scrollbar-track {
+  background: transparent;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--border-default);
+  border-radius: var(--radius-full);
+}
+::-webkit-scrollbar-thumb:hover {
+  background: var(--border-strong);
+}
+
+/* ------------------------------------------------------------
+   5. TYPOGRAPHY UTILITIES
+   These are compositional classes applied to semantic elements.
+   Not Tailwind utilities — these live here to keep component
+   files clean of repetitive multi-class type stacks.
+   ------------------------------------------------------------ */
+
+/* Page title — used in section headers */
+.type-title {
+  font-size: 20px;
+  font-weight: 600;
+  line-height: 1.3;
+  letter-spacing: -0.025em;
+  color: var(--text-primary);
+}
+
+/* Section label — small caps label above content groups */
+.type-section-label {
+  font-size: 11px;
+  font-weight: 600;
+  line-height: 1;
+  letter-spacing: 0.07em;
+  text-transform: uppercase;
+  color: var(--text-tertiary);
+}
+
+/* Row primary text */
+.type-row-primary {
+  font-size: 14px;
+  font-weight: 500;
+  line-height: 1.4;
+  color: var(--text-primary);
+}
+
+/* Row secondary / supporting text */
+.type-row-secondary {
+  font-size: 13px;
+  font-weight: 400;
+  line-height: 1.4;
+  color: var(--text-secondary);
+}
+
+/* Timestamp / metadata */
+.type-meta {
+  font-size: 12px;
+  font-weight: 400;
+  line-height: 1;
+  color: var(--text-tertiary);
+}
+
+/* Monospace — inline code references */
+.type-mono {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 400;
+  color: var(--text-secondary);
+}
