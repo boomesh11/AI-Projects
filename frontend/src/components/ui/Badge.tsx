@@ -56,7 +56,8 @@ interface BadgeProps {
 }
 
 export default function Badge({ variant, children }: BadgeProps) {
-  const config = BADGE_CONFIG[variant];
+  const normalizedVariant = (variant?.toLowerCase() ?? "priority-medium") as BadgeVariant;
+  const config = BADGE_CONFIG[normalizedVariant] ?? BADGE_CONFIG["priority-medium"];
   return (
     <span
       style={{

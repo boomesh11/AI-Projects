@@ -1,14 +1,27 @@
 /**
- * CatalystStrip — Ambient AI status bar.
+ * CatalystStrip — Ambient AI status bar (v2: session-aware).
  *
- * Fixed to the bottom of the workspace canvas.
- * Sprint 1: displays idle state only.
- * Sprint 2: will surface active AI operations, progress, and quick actions.
+ * Four zones left-to-right:
+ *   [logo + status text]  [MemoryHUD — grows in center]  [⌘K hint]
  *
- * Server Component — no interactivity needed in Sprint 1.
- * Height is controlled by the --strip-height CSS token (36px).
+ * Becomes a Client Component in v2 because it accepts sessionId and
+ * refreshToken from WorkspaceShell to drive the MemoryHUD.
  */
-export default function CatalystStrip() {
+"use client";
+
+import MemoryHUD from "@/components/shell/MemoryHUD";
+
+interface CatalystStripProps {
+  sessionId: string;
+  refreshToken: number;
+  onSessionReset: (newSessionId: string) => void;
+}
+
+export default function CatalystStrip({
+  sessionId,
+  refreshToken,
+  onSessionReset,
+}: CatalystStripProps) {
   return (
     <footer
       aria-label="Catalyst AI status"
@@ -48,12 +61,20 @@ export default function CatalystStrip() {
           color: "var(--text-tertiary)",
           fontWeight: 400,
           userSelect: "none",
+          flexShrink: 0,
         }}
       >
         Catalyst ready
       </span>
 
-      {/* Spacer */}
+      {/* ── Memory HUD — expands in the center ──────────────────── */}
+      <MemoryHUD
+        sessionId={sessionId}
+        refreshToken={refreshToken}
+        onSessionReset={onSessionReset}
+      />
+
+      {/* Spacer — pushes keyboard hint to the right */}
       <span style={{ flex: 1 }} aria-hidden="true" />
 
       {/* Keyboard shortcut hint */}
@@ -65,6 +86,7 @@ export default function CatalystStrip() {
           alignItems: "center",
           gap: "4px",
           userSelect: "none",
+          flexShrink: 0,
         }}
       >
         <kbd

@@ -1,95 +1,13 @@
 import type { Metadata } from "next";
-import { teamMembers } from "@/lib/data/team";
 import { activityLog } from "@/lib/data/activity";
 import { formatRelativeTime } from "@/lib/utils";
 import { Avatar } from "@/components/ui/Avatar";
-import StatusDot from "@/components/ui/StatusDot";
-import HoverRow from "@/components/ui/HoverRow";
-import type { User, ActivityEntry } from "@/lib/types";
+import type { ActivityEntry } from "@/lib/types";
+import EmployeeTable from "@/components/workspace/EmployeeTable";
 
 export const metadata: Metadata = {
   title: "People",
 };
-
-// ─────────────────────────────────────────────────────────────────
-// Presence → StatusDot variant map
-// ─────────────────────────────────────────────────────────────────
-
-const PRESENCE_VARIANT = {
-  online:  "active",
-  away:    "review",
-  offline: "idle",
-} as const satisfies Record<User["presence"], "active" | "review" | "idle">;
-
-const PRESENCE_LABEL: Record<User["presence"], string> = {
-  online:  "Online",
-  away:    "Away",
-  offline: "Offline",
-};
-
-// ─────────────────────────────────────────────────────────────────
-// Team member card — horizontal layout
-// ─────────────────────────────────────────────────────────────────
-
-function MemberRow({ user }: { user: User }) {
-  const lastActivity = activityLog.find((e) => e.actorName === user.name);
-
-  return (
-    <HoverRow style={{ borderBottom: "1px solid var(--border-subtle)" }}>
-      <div
-        style={{
-          display: "flex",
-          alignItems: "center",
-          gap: "14px",
-          padding: "14px 0",
-        }}
-      >
-        <Avatar name={user.name} size="md" />
-
-        <div style={{ flex: 1, minWidth: 0 }}>
-          <p
-            style={{
-              fontSize: "14px",
-              fontWeight: 500,
-              color: "var(--text-primary)",
-              marginBottom: "3px",
-            }}
-          >
-            {user.name}
-          </p>
-          <span className="type-meta">{user.role}</span>
-        </div>
-
-        <div
-          style={{
-            display: "flex",
-            alignItems: "center",
-            gap: "6px",
-            flexShrink: 0,
-            minWidth: "80px",
-          }}
-        >
-          <StatusDot variant={PRESENCE_VARIANT[user.presence]} size={6} />
-          <span className="type-meta">{PRESENCE_LABEL[user.presence]}</span>
-        </div>
-
-        <div style={{ flexShrink: 0, minWidth: "240px", textAlign: "right" }}>
-          {lastActivity ? (
-            <span className="type-meta">
-              {lastActivity.verb}{" "}
-              <span style={{ color: "var(--text-secondary)" }}>
-                {lastActivity.subject}
-              </span>{" "}
-              · {formatRelativeTime(lastActivity.timestamp)}
-            </span>
-          ) : (
-            <span className="type-meta">No recent activity</span>
-          )}
-        </div>
-      </div>
-    </HoverRow>
-  );
-}
 
 // ─────────────────────────────────────────────────────────────────
 // Activity log entry
@@ -174,39 +92,7 @@ export default function PeoplePage() {
       >
         {/* ── Left: Team roster ───────────────────────────────────── */}
         <div>
-          <p className="type-section-label" style={{ marginBottom: "12px" }}>
-            Team · {teamMembers.length} members
-          </p>
-
-          {/* Column headers */}
-          <div
-            style={{
-              display: "flex",
-              alignItems: "center",
-              gap: "14px",
-              paddingBottom: "8px",
-              borderBottom: "1px solid var(--border-default)",
-              marginBottom: "0",
-            }}
-          >
-            <div style={{ width: "32px" }} aria-hidden="true" />
-            <span className="type-section-label" style={{ flex: 1 }}>
-              Name
-            </span>
-            <span className="type-section-label" style={{ minWidth: "80px" }}>
-              Status
-            </span>
-            <span
-              className="type-section-label"
-              style={{ minWidth: "240px", textAlign: "right" }}
-            >
-              Last Activity
-            </span>
-          </div>
-
-          {teamMembers.map((user) => (
-            <MemberRow key={user.id} user={user} />
-          ))}
+          <EmployeeTable />
         </div>
 
         {/* ── Right: Recent activity log ───────────────────────────── */}

@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import IntentRail from "@/components/shell/IntentRail";
-import CatalystStrip from "@/components/shell/CatalystStrip";
+import WorkspaceShell from "@/components/workspace/WorkspaceShell";
 
 export const metadata: Metadata = {
   title: {
@@ -12,25 +12,24 @@ export const metadata: Metadata = {
 /**
  * Workspace Shell Layout.
  *
- * Three-zone layout:
+ * Four-zone layout:
  *
  *   ┌──────────────┬──────────────────────────────────┐
- *   │              │                                  │
- *   │  IntentRail  │        Workspace Canvas          │
- *   │   (220px)    │          (flex-1)                │
- *   │              │                                  │
+ *   │              │  CommandBar                      │
+ *   │  IntentRail  ├──────────────────────────────────┤
+ *   │   (220px)    │  Dynamic Action / Page Content   │
+ *   │              │          (flex-1)                │
  *   └──────────────┴──────────────────────────────────┘
  *   │              CatalystStrip (36px)               │
  *   └─────────────────────────────────────────────────┘
  *
- * The rail and strip are fixed to the viewport.
- * The canvas is the only scrolling region.
+ * CatalystStrip is now rendered inside WorkspaceShell (a Client Component)
+ * so it can receive the live sessionId and refreshToken props needed by
+ * the MemoryHUD.  The layout itself stays a Server Component.
  *
  * Responsive behavior:
  * - ≥768px: rail visible, canvas fills remaining width
- * - <768px:  rail collapses (future Sprint 2 mobile nav)
- *
- * Server Component — interactivity is delegated to children.
+ * - <768px:  rail collapses (future mobile nav)
  */
 export default function WorkspaceLayout({
   children,
@@ -67,14 +66,20 @@ export default function WorkspaceLayout({
             overflowY: "auto",
             overflowX: "hidden",
             backgroundColor: "var(--surface-base)",
+            display: "flex",
+            flexDirection: "column",
           }}
         >
-          {children}
+          {/*
+           * WorkspaceShell renders:
+           *   - CommandBar (with sessionId)
+           *   - ActionRenderer (dynamic form)
+           *   - {children} (page content)
+           *   - CatalystStrip (with sessionId + refreshToken for MemoryHUD)
+           */}
+          <WorkspaceShell>{children}</WorkspaceShell>
         </main>
       </div>
-
-      {/* ── Catalyst Strip — ambient AI status ────────────────────── */}
-      <CatalystStrip />
     </div>
   );
 }
